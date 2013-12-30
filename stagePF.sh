@@ -1,0 +1,11 @@
+ln access_code.gif ../captiveportal-access_code.gif
+ln action.php ../captiveportal-action.php
+ln bottomBackground.jpg ../captiveportal-bottomBackground.jpg
+ln btn_submit.gif ../captiveportal-btn_submit.gif
+ln captiveportal.html ../captiveportal-captiveportal.html
+ln logo_hiex.gif ../captiveportal-logo_hiex.gif
+ln stay_smart.gif ../captiveportal-stay_smart.gif
+ln styles.css ../captiveportal-styles.css
+ln terms.php ../index.php
+ln topBackground.jpg ../captiveportal-topBackground.jpg
+ln welcome_log_in_hiex.gif ../captiveportal-welcome_log_in_hiex.gif
