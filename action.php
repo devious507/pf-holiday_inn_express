@@ -15,6 +15,7 @@ if(!isset($redirurl)) {
 	$redirurl=$_GET['redirurl'];
 }
 
+$siteid = '018ec5';
 $url="http://www.guestsuite.tv/pf/getPass.php?siteid={$siteid}&redirurl={$redirurl}";
 
 $fh=@fopen($url,'r');
@@ -40,14 +41,19 @@ if($result != "OK") {
     $temp[1]="OK";
 }
 
-//var_dump($temp); exit();
+//print md5($_GET['code']); print "<br>"; var_dump($temp); exit();
 
 $enc_code = md5($_GET['code']);
 //print $enc_code."<br>"; print $temp[0]."<br>"; print $temp[1]."<br>";
-if(($enc_code != $temp[0]) && ($temp[0] !="OK")) {
+if(($enc_code != $temp[0]) && ($temp[0] !="OK") && ($enc_code != $temp[1])) {
+	//print "bad password";
 	header("Location: /");
 	exit();
 } else {
+	if($_GET['redirurl'] == '') {
+		$_GET['redirurl']='http://www.google.com/';
+	}
+	//var_dump($_GET); exit();
 ?>
 <html>
 <head>
