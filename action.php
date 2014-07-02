@@ -1,71 +1,50 @@
 <?php
 
-$action=$_GET['portalaction'];
 $h = `/bin/hostname`;
 $tmp=explode(".",$h);
-$siteid = $tmp[0];
+$site = $tmp[0];
 
-if(isset($_POST['redirurl'])) {
-	$_GET['redirurl']=$_POST['redirurl'];
-}
-if(isset($_POST['portalaction'])) {
-	$_GET['portalaction']=$_POST['portalaction'];
-}
-if(!isset($redirurl)) {
-	$redirurl=$_GET['redirurl'];
+if(!isset($_GET['code'])) {
+	header("Location: index.html");
+	exit();
 }
 
-$siteid = '018ec5';
-$url="http://www.guestsuite.tv/pf/getPass.php?siteid={$siteid}&redirurl={$redirurl}";
+$checkURL="http://www.guestsuite.tv/pf/checkLogin.php?site={$site}&password={$_GET['code']}";
 
-$fh=@fopen($url,'r');
+
+$fh=fopen($checkURL,'r');
 if($fh) {
 	$result=fread($fh,100);
 	fclose($fh);
 } else {
-	$result="OK";
+	$result="ERROR";
 }
 
+if(!isset($_GET['redirurl'])) {
+	$_GET['redirurl']='http://www.google.com';
+}
 
-$temp=array();
 if($result != "OK") {
-	$temp=explode("\n",$result);
-	if(!isset($temp[1])) {
-		$temp[1]=$temp[0];
-	}
-	if($temp[1] == '') {
-		$temp[1]=$temp[0];
-	}
-} else {
-    $temp[0]="OK";
-    $temp[1]="OK";
-}
-
-//print md5($_GET['code']); print "<br>"; var_dump($temp); exit();
-
-$enc_code = md5($_GET['code']);
-//print $enc_code."<br>"; print $temp[0]."<br>"; print $temp[1]."<br>";
-if(($enc_code != $temp[0]) && ($temp[0] !="OK") && ($enc_code != $temp[1])) {
-	//print "bad password";
-	header("Location: /");
+	header("Location: index.html");
 	exit();
-} else {
-	if($_GET['redirurl'] == '') {
-		$_GET['redirurl']='http://www.google.com/';
-	}
-	//var_dump($_GET); exit();
-?>
-<html>
-<head>
-<title>Login Support Page</title>
-</head>
-<body onload="document.forms.myForm.submit();">
-<form name="myForm" id="myForm" method="post" action="<?php echo $_GET['portalaction']; ?>">
-<input type="hidden" name="redirurl" value="<?php echo $_GET['redirurl']; ?>">
-<input type="hidden" name="accept" value="Continue">
-</form>
-</body>
-</html>
-<?php
 }
 ?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+        <head>
+                <title>Welcome</title>
+                <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+        </head>
+        <body onLoad="javascript:document.forms.myForm.submit();">
+		<!-- <?php echo $checkURL; ?> -->
+		<form method="post" name="myForm" id="myForm" action="<?php echo $_GET['portalaction'];?>">
+ 			<input name="auth_user" type="hidden">
+   			<input name="auth_pass" type="hidden">
+   			<input name="auth_voucher" type="hidden">
+                        <input type="hidden" name="redirurl" value="<?php echo $_GET['redirurl']; ?>">
+			<input type="hidden" name="accept" value="Continue">
+                        Redirecting: <input type="submit" name="submit_btn" value="Continue">
+                </form>
+        </body>
+</html>
+
